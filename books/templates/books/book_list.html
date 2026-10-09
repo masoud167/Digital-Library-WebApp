@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>کتابخانه دیجیتال</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; margin: 0; background-color: #f4f4f9; padding-bottom: 40px; }
+        .header { background-color: #343a40; color: white; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .main-container { padding: 25px; max-width: 1200px; margin: auto; }
+        .layout { display: flex; gap: 20px; align-items: flex-start; }
+        .sidebar { width: 250px; flex-shrink: 0; }
+        .content-col { flex: 1; min-width: 0; }
+        .side-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 15px; position: sticky; top: 15px; }
+        .side-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .side-head h3 { margin: 0; font-size: 16px; }
+        .side-clear { font-size: 12px; color: #dc3545; }
+        .side-cat { display: flex; align-items: center; gap: 8px; padding: 7px 4px; font-size: 14px; cursor: pointer; }
+        .side-cat input { width: 18px; height: 18px; accent-color: #007bff; flex-shrink: 0; }
+        .side-sub { margin-right: 22px; padding-right: 10px; border-right: 2px solid #e9ecef; font-size: 13px; color: #495057; }
+        .side-apply { width: 100%; margin-top: 12px; padding: 9px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .search-form { margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .search-input { padding: 8px 12px; flex: 1 1 200px; max-width: 300px; min-width: 0; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc; }
+        .search-btn { padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .book-grid { display: flex; flex-wrap: wrap; gap: 20px; }
+        .book-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: white; width: 200px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .book-card img { max-width: 100%; height: 250px; object-fit: cover; border-radius: 4px; }
+        a { text-decoration: none; color: #007bff; }
+        @media (max-width: 600px) {
+            .header { padding: 10px 15px; }
+            .main-container { padding: 15px; }
+            h1 { font-size: 24px; }
+            .book-card { width: calc(50% - 10px); }
+            .layout { flex-direction: column; }
+            .sidebar { width: 100%; }
+            .side-box { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- نوار بالایی (Header) -->
+    <div class="header">
+        <div><strong>کتابخانه دیجیتال</strong></div>
+        <div>
+            {% if user.is_authenticated %}
+                <span>خوش آمدید، {{ user.username }}!</span>
+                <a href="{% url 'accounts:profile' %}" style="color: #17a2b8; margin: 0 12px;">پروفایل من</a>
+                <form action="{% url 'accounts:logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background: none; border: none; color: #ff6b6b; cursor: pointer;">خروج</button>
+                </form>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" style="color: white; margin-left: 15px;">ورود</a>
+                <a href="{% url 'accounts:signup' %}" style="color: #28a745;">ثبت‌نام</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="main-container">
+        <h1>کتابخانه دیجیتال</h1>
+        <hr style="margin-bottom: 20px; border: 0; border-top: 1px solid #ccc;">
+
+        <div class="layout">
+            <!-- ستون کناری دسته‌بندی‌ها -->
+            <aside class="sidebar">
+                <form method="GET" action="{% url 'books:book_list' %}">
+                    {% if query %}
+                        <input type="hidden" name="q" value="{{ query }}">
+                    {% endif %}
+                    <div class="side-box">
+                        <div class="side-head">
+                            <h3>دسته‌بندی‌ها</h3>
+                            {% if selected_slugs %}
+                                <a href="{% url 'books:book_list' %}{% if query %}?q={{ query }}{% endif %}" class="side-clear">پاک کردن</a>
+                            {% endif %}
+                        </div>
+                        {% for cat in categories %}
+                            <label class="side-cat">
+                                <input type="checkbox" name="category" value="{{ cat.slug }}" {% if cat.slug in selected_slugs %}checked{% endif %}>
+                                <span>{{ cat.name }} ({{ cat.total_books }})</span>
+                            </label>
+                            {% for sub in cat.children.all %}
+                                <label class="side-cat side-sub">
+                                    <input type="checkbox" name="category" value="{{ sub.slug }}" {% if sub.slug in selected_slugs %}checked{% endif %}>
+                                    <span>{{ sub.name }} ({{ sub.total_books }})</span>
+                                </label>
+                            {% endfor %}
+                        {% endfor %}
+                        <button type="submit" class="side-apply">اعمال فیلتر</button>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- ستون اصلی -->
+            <div class="content-col">
+                <!-- فرم جستجو -->
+                <form method="GET" action="{% url 'books:book_list' %}" class="search-form">
+                    {% for slug in selected_slugs %}
+                        <input type="hidden" name="category" value="{{ slug }}">
+                    {% endfor %}
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ query|default_if_none:'' }}"
+                        placeholder="جستجو بر اساس عنوان یا نویسنده..."
+                        class="search-input"
+                    >
+                    <button type="submit" class="search-btn">جستجو</button>
+
+                    {% if query or selected_slugs %}
+                        <a href="{% url 'books:book_list' %}" style="margin-right: 10px; color: #dc3545;">پاک کردن فیلترها</a>
+                    {% endif %}
+                </form>
+
+                <!-- عنوان وضعیت فیلتر انتخاب‌شده -->
+                {% if selected_categories %}
+                    <h3 style="color: #495057; margin-bottom: 20px;">فیلتر فعال: <span style="color: #007bff;">{{ selected_categories|join:"، " }}</span></h3>
+                {% endif %}
+
+                <!-- لیست کتاب‌ها -->
+                <div class="book-grid">
+                    {% for book in books %}
+                        <div class="book-card">
+                            {% if book.cover_image %}
+                                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}">
+                            {% else %}
+                                <div style="height:250px; background:#eee; display:flex; align-items:center; justify-content:center; border-radius: 4px; color: #777;">بدون تصویر</div>
+                            {% endif %}
+                            <h3 style="font-size: 16px; margin: 10px 0 5px 0;"><a href="{% url 'books:book_detail' book.pk %}">{{ book.title }}</a></h3>
+                            <p style="font-size: 13px; color: #555; margin: 3px 0;">نویسنده: {{ book.author }}</p>
+                            <p style="font-size: 12px; color: #888; margin: 3px 0;"><small>دسته‌بندی: {% if book.category.parent %}{{ book.category.parent.name }} / {% endif %}{{ book.category.name }}</small></p>
+                        </div>
+                    {% empty %}
+                        <p style="color: #6c757d;">هیچ کتابی پیدا نشد.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

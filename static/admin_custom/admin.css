@@ -1,0 +1,314 @@
+/* پوسته سفارشی ادمین جنگو — کتابخانه دیجیتال — حالت تیره */
+
+/* --- پالت تیره (در همه حالت‌های theme اعمال می‌شود) --- */
+:root,
+html[data-theme="light"],
+html[data-theme="dark"] {
+    --primary: #2f81f7;
+    --primary-fg: #ffffff;
+    --secondary: #2f81f7;
+    --header-bg: #0f1116;
+    --header-color: #cfd6e4;
+    --header-branding-color: #ffffff;
+    --header-link-color: #ffffff;
+    --body-fg: #e8eaf0;
+    --body-bg: #14161d;
+    --body-quiet-color: #a6adba;
+    --body-medium-color: #c9ced8;
+    --body-loud-color: #ffffff;
+    --breadcrumbs-fg: #aeb6c4;
+    --breadcrumbs-link-fg: #ffffff;
+    --breadcrumbs-bg: #0f1116;
+    --link-fg: #6db6ff;
+    --link-hover-color: #9ecfff;
+    --link-selected-fg: #9ecfff;
+    --hairline-color: #2a2f3b;
+    --border-color: #3a4150;
+    --error-fg: #ff7b72;
+    --darkened-bg: #1c2029;
+    --selected-bg: #22304d;
+    --selected-row: #1b2740;
+    --button-fg: #ffffff;
+    --button-bg: #2f81f7;
+    --message-success-bg: #10331f;
+    --message-warning-bg: #3a2e10;
+    --message-error-bg: #3b1519;
+    color-scheme: dark;
+}
+
+/* --- فونت --- */
+body,
+input,
+button,
+select,
+textarea {
+    font-family: Tahoma, "Segoe UI", sans-serif;
+}
+
+/* --- نوار بالایی --- */
+#header {
+    background-color: #0f1116;
+    border-bottom: 3px solid #2f81f7;
+}
+
+#branding h1,
+#branding a {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+#user-tools {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+}
+
+#user-tools a,
+#user-tools button {
+    color: #9ecfff;
+}
+
+#user-tools a:hover,
+#user-tools button:hover {
+    color: #ffffff;
+}
+
+/* دکمه تغییر تم پنهان (تم همیشه تیره است) */
+#user-tools .theme-toggle {
+    display: none !important;
+}
+
+/* --- خرده‌نانوایی --- */
+.breadcrumbs {
+    background-color: #0f1116;
+    border-radius: 0 0 8px 8px;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+}
+
+/* --- کارت‌ها و جدول‌ها --- */
+.module {
+    background-color: #1a1e27;
+    border: 1px solid var(--hairline-color);
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.module h2,
+.module h3,
+th {
+    background-color: #232836 !important;
+    color: #dfe4ee !important;
+    border-color: var(--hairline-color);
+}
+
+caption .section {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+td,
+th {
+    border-color: var(--hairline-color) !important;
+}
+
+td a {
+    color: var(--link-fg);
+}
+
+tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* --- فرم‌ها --- */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="search"],
+select,
+textarea {
+    background-color: #0f1218;
+    color: var(--body-fg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #2f81f7;
+    background-color: #0f1218;
+    color: var(--body-fg);
+}
+
+.form-row {
+    margin-bottom: 12px;
+}
+
+/* --- دکمه‌ها --- */
+.button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.submit-row input {
+    background-color: #2f81f7;
+    border: 1px solid #2f81f7;
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+.submit-row input:hover {
+    background-color: #4a93ff;
+    border-color: #4a93ff;
+}
+
+.submit-row input.default {
+    background-color: #2ea44f;
+    border-color: #2ea44f;
+}
+
+.submit-row input.default:hover {
+    background-color: #3fb950;
+    border-color: #3fb950;
+}
+
+/* --- لینک‌ها --- */
+a:link,
+a:visited {
+    color: var(--link-fg);
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
+/* --- پیام‌ها --- */
+.messagelist li {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    border: 1px solid transparent;
+}
+
+.messagelist li.success {
+    background-color: var(--message-success-bg);
+    border-color: #1d5c33;
+    color: #7ee2a8;
+}
+
+.messagelist li.warning {
+    background-color: var(--message-warning-bg);
+    border-color: #6b5518;
+    color: #ffd97a;
+}
+
+.messagelist li.error {
+    background-color: var(--message-error-bg);
+    border-color: #7a2a33;
+    color: #ffa198;
+}
+
+/* --- صفحه ورود ادمین: کارت تمیز و یکپارچه --- */
+body.login {
+    background-color: #0f1116;
+}
+
+body.login #container {
+    background-color: #1a1e27;
+    border: 1px solid var(--hairline-color);
+    border-radius: 14px;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* حذف جعبهٔ دوم و باندهای خالی: فرم مستقیم داخل ظرف اصلی */
+body.login #content-main {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+body.login .form-row {
+    margin-bottom: 14px;
+}
+
+body.login .form-row label {
+    display: block;
+    line-height: 1.6;
+    margin-bottom: 6px;
+    color: #cfd6e4;
+}
+
+body.login .submit-row {
+    margin-top: 20px;
+    padding-top: 0;
+    border-top: 0;
+    text-align: center;
+}
+
+body.login .submit-row input {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+}
+
+body.login .errornote {
+    margin-bottom: 18px;
+}
+
+@media (min-width: 768px) {
+    body.login #content {
+        padding: 24px 32px 32px;
+    }
+}
+
+/* --- دکمه بازگشت --- */
+.admin-back-btn {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 9999;
+    background-color: #2f81f7;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-family: Tahoma, "Segoe UI", sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.admin-back-btn:hover {
+    background-color: #4a93ff;
+}
+
+/* در داشبورد، صفحه ورود و پنجره‌های بازشو دکمه بازگشت لازم نیست */
+body.dashboard .admin-back-btn,
+body.login .admin-back-btn,
+body.popup .admin-back-btn {
+    display: none;
+}
+
+/* --- چیدمان واکنش‌گرا --- */
+@media (max-width: 767px) {
+    #header {
+        flex-wrap: wrap;
+    }
+
+    .module {
+        border-radius: 6px;
+    }
+}
